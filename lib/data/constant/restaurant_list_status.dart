@@ -1,15 +1,13 @@
-import 'package:foodie_finder/domain/entity/restaurant.dart';
-
 sealed class RestaurantListResultState {}
 
 class RestaurantListNoneState extends RestaurantListResultState {}
 
 class RestaurantListLoadingState extends RestaurantListResultState {}
 
-class RestaurantListSuccessState extends RestaurantListResultState {
-  final List<Restaurant> restaurants;
+class RestaurantListSuccessState<T> extends RestaurantListResultState {
+  final T data;
 
-  RestaurantListSuccessState(this.restaurants);
+  RestaurantListSuccessState(this.data);
 }
 
 class RestaurantListErrorState extends RestaurantListResultState {

@@ -14,19 +14,19 @@ class AppBarContainer extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Icon(
             Icons.restaurant_menu,
-            color: Color(AppColors.textColor),
+            color: Theme.of(context).primaryColor,
             size: 40,
           ),
           Text(
             'Foodie Finder',
             style: TextStyle(
-              color: Color(AppColors.textColor),
+              color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.bold,
             ),
           ),
         ],
       ),
-      backgroundColor: Color(AppColors.backgroundColor),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     );
   }
 }

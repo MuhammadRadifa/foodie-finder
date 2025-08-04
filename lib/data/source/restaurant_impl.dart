@@ -26,4 +26,22 @@ class RestaurantImpl extends RestaurantRepository {
       return RestaurantDetailDto.empty();
     }
   }
+
+  @override
+  Future<List<Restaurant>> getAllRestaurantsByQuery(String query) async {
+    try {
+      return await _api.getAllRestaurantsByQuery(query);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  @override
+  Future<void> addReview(String id, String name, String review) async {
+    try {
+      await _api.addReview(id, name, review);
+    } catch (e) {
+      throw Exception('Failed to add review');
+    }
+  }
 }
