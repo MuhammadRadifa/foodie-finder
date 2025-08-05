@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodie_finder/presentation/shared/app_bar_container.dart';
 import 'package:foodie_finder/presentation/shared/bottom_bar_container.dart';
-import 'package:foodie_finder/style/colors/colors.dart';
+import 'package:foodie_finder/provider/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,10 +12,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  String selectedTheme = 'dark'; // 'light' or 'dark'
-
   @override
   Widget build(BuildContext context) {
+    String selectedTheme = Provider.of<ThemeNotifier>(
+      context,
+      listen: false,
+    ).themeMode.toString().split('.').last;
     return Scaffold(
       appBar: AppBarContainer(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -33,9 +36,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedTheme = 'light';
-                      });
+                      Provider.of<ThemeNotifier>(
+                        context,
+                        listen: false,
+                      ).setTheme(ThemeMode.light);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(16),
@@ -82,19 +86,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedTheme = 'dark';
-                      });
+                      Provider.of<ThemeNotifier>(
+                        context,
+                        listen: false,
+                      ).setTheme(ThemeMode.dark);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: selectedTheme == 'dark'
-                            ? Theme.of(context).primaryColor.withOpacity(0.1)
+                            ? Colors.white.withOpacity(0.1)
                             : Colors.grey[100],
                         border: Border.all(
                           color: selectedTheme == 'dark'
-                              ? Theme.of(context).primaryColor
+                              ? Colors.white
                               : Colors.grey[300]!,
                           width: 2,
                         ),
@@ -106,7 +111,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Icons.dark_mode,
                             size: 40,
                             color: selectedTheme == 'dark'
-                                ? Theme.of(context).primaryColor
+                                ? Colors.white
                                 : Colors.grey[600],
                           ),
                           const SizedBox(height: 8),
@@ -116,7 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: selectedTheme == 'dark'
-                                  ? Theme.of(context).primaryColor
+                                  ? Colors.white
                                   : Colors.grey[600],
                             ),
                           ),

@@ -6,7 +6,6 @@ import 'package:foodie_finder/presentation/shared/app_bar_container.dart';
 import 'package:foodie_finder/presentation/shared/bottom_bar_container.dart';
 import 'package:foodie_finder/presentation/shared/list_restaurant_card.dart';
 import 'package:foodie_finder/provider/restaurant_provider.dart';
-import 'package:foodie_finder/style/colors/colors.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -137,16 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Welcome Section
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Text(
                 'Welcome to Foodie Finder',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
             ),
 

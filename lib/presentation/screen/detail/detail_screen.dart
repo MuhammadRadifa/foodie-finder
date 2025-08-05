@@ -4,7 +4,6 @@ import 'package:foodie_finder/domain/entity/restaurant_detail.dart';
 import 'package:foodie_finder/presentation/screen/detail/body_detail_screen.dart';
 import 'package:foodie_finder/presentation/shared/app_bar_container.dart';
 import 'package:foodie_finder/provider/detail_provider.dart';
-import 'package:foodie_finder/style/colors/colors.dart';
 import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {

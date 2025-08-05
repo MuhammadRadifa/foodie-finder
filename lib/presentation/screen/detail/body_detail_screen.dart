@@ -143,7 +143,10 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
             const SizedBox(width: 8),
             Text(
               '(${widget.data.customerReviews.length} reviews)',
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
+              ),
             ),
           ],
         ),
@@ -155,7 +158,7 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey[200]!),
       ),
@@ -178,10 +181,7 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
             ],
           ),
           const SizedBox(height: 4),
-          Text(
-            widget.data.address,
-            style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-          ),
+          Text(widget.data.address, style: TextStyle(fontSize: 13)),
         ],
       ),
     );
@@ -292,9 +292,9 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.grey[50],
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[200]!),
+            border: Border.all(color: Theme.of(context).dividerColor),
           ),
           child: Wrap(
             spacing: 8,
@@ -306,9 +306,9 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[300]!),
+                  border: Border.all(color: Theme.of(context).dividerColor),
                 ),
                 child: Text(
                   item.name,
@@ -438,9 +438,9 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
               return Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey[200]!),
+                  border: Border.all(color: Theme.of(context).dividerColor),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
