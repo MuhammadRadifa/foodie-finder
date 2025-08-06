@@ -26,7 +26,9 @@ class BottomBarContainer extends StatelessWidget {
       ],
       currentIndex: currentIndex,
       selectedItemColor: Theme.of(context).primaryColor,
-      unselectedItemColor: Theme.of(context).cardColor,
+      unselectedItemColor: Theme.of(
+        context,
+      ).colorScheme.primary.withValues(alpha: 0.6),
       onTap: (index) {
         // Navigate only if the selected tab is different from current route
         if (index == 0 && currentRoute != NavigationRoute.home.route) {
