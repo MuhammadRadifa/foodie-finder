@@ -82,7 +82,7 @@ class _ListRestaurantCardState extends State<ListRestaurantCard>
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 height: 120,
                 decoration: BoxDecoration(
-                  color: isDarkMode ? Colors.grey[850] : Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(

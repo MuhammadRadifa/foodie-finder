@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodie_finder/data/constant/navigation_route.dart';
-import 'package:foodie_finder/style/colors/colors.dart';
 
 class BottomBarContainer extends StatelessWidget {
   const BottomBarContainer({super.key});

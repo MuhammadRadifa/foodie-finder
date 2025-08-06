@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodie_finder/style/colors/colors.dart';
 
 class AppBarContainer extends StatelessWidget implements PreferredSizeWidget {
   const AppBarContainer({super.key});
@@ -10,6 +9,7 @@ class AppBarContainer extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       title: Row(
         children: [
           Icon(
