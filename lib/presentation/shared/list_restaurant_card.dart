@@ -189,7 +189,7 @@ class _ListRestaurantCardState extends State<ListRestaurantCard>
                                                 index < widget.rating.floor()
                                                     ? Icons.star
                                                     : Icons.star_border,
-                                                size: 14,
+                                                size: 8,
                                                 color: Colors.amber,
                                               );
                                             }),
@@ -199,7 +199,7 @@ class _ListRestaurantCardState extends State<ListRestaurantCard>
                                       const SizedBox(width: 8),
                                       Icon(
                                         Icons.location_on_outlined,
-                                        size: 14,
+                                        size: 12,
                                         color: isDarkMode
                                             ? Colors.grey[400]
                                             : Colors.grey[600],
@@ -208,7 +208,7 @@ class _ListRestaurantCardState extends State<ListRestaurantCard>
                                       Text(
                                         widget.city,
                                         style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: 12,
                                           color: isDarkMode
                                               ? Colors.grey[400]
                                               : Colors.grey[600],

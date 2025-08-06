@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   // Light theme colors
@@ -32,6 +33,7 @@ final lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: AppColors.primaryColor,
   scaffoldBackgroundColor: AppColors.backgroundColor,
+  fontFamily: GoogleFonts.poppins().fontFamily,
 
   colorScheme: ColorScheme.light(
     primary: AppColors.primaryColor,
@@ -57,7 +59,7 @@ final lightTheme = ThemeData(
     ),
   ),
 
-  textTheme: TextTheme(
+  textTheme: GoogleFonts.poppinsTextTheme().copyWith(
     displayLarge: TextStyle(
       color: AppColors.textColor,
       fontWeight: FontWeight.bold,
@@ -119,6 +121,7 @@ final darkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: AppColors.darkPrimary,
   scaffoldBackgroundColor: AppColors.darkBackground,
+  fontFamily: GoogleFonts.poppins().fontFamily,
 
   colorScheme: ColorScheme.dark(
     primary: AppColors.darkPrimary,
