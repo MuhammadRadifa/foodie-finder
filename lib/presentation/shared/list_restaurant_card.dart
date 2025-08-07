@@ -26,7 +26,6 @@ class _ListRestaurantCardState extends State<ListRestaurantCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
-  bool _isPressed = false;
 
   @override
   void initState() {
@@ -47,19 +46,15 @@ class _ListRestaurantCardState extends State<ListRestaurantCard>
   }
 
   void _onTapDown(TapDownDetails details) {
-    setState(() => _isPressed = true);
     _animationController.forward();
   }
 
   void _onTapUp(TapUpDetails details) {
-    setState(() => _isPressed = false);
-
     Navigator.pushNamed(context, "/detail", arguments: widget.id);
     _animationController.reverse();
   }
 
   void _onTapCancel() {
-    setState(() => _isPressed = false);
     _animationController.reverse();
   }
 
@@ -86,16 +81,9 @@ class _ListRestaurantCardState extends State<ListRestaurantCard>
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: _isPressed
-                          ? Colors.transparent
-                          : (isDarkMode
-                                ? Colors.black26
-                                : Colors.grey.withAlpha(
-                                    25,
-                                  )), // ✅ ganti withValues
-                      offset: _isPressed ? Offset.zero : const Offset(0, 2),
-                      blurRadius: _isPressed ? 0 : 8,
-                      spreadRadius: _isPressed ? 0 : 0,
+                      color: isDarkMode
+                          ? Colors.black26
+                          : Colors.grey.withAlpha(25), // ✅ ganti withValues
                     ),
                   ],
                 ),
