@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:foodie_finder/data/constant/navigation_route.dart';
 
@@ -21,6 +23,7 @@ class BottomBarContainer extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
         BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
       ],
       currentIndex: currentIndex,
@@ -33,6 +36,9 @@ class BottomBarContainer extends StatelessWidget {
         if (index == 0 && currentRoute != NavigationRoute.home.route) {
           Navigator.pushNamed(context, NavigationRoute.home.route);
         } else if (index == 1 &&
+            currentRoute != NavigationRoute.favorite.route) {
+          Navigator.pushNamed(context, NavigationRoute.favorite.route);
+        } else if (index == 2 &&
             currentRoute != NavigationRoute.settings.route) {
           Navigator.pushNamed(context, NavigationRoute.settings.route);
         }

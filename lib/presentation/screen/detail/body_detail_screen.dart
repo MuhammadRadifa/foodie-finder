@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:foodie_finder/domain/entity/restaurant.dart';
 import 'package:foodie_finder/domain/entity/restaurant_detail.dart';
 import 'package:foodie_finder/provider/detail_provider.dart';
+import 'package:foodie_finder/provider/favorite_provider.dart';
 import 'package:provider/provider.dart';
 
 class BodyDetailScreen extends StatefulWidget {
   final RestaurantDetail data;
+  final bool isFavorite;
 
-  const BodyDetailScreen({super.key, required this.data});
+  const BodyDetailScreen({
+    super.key,
+    required this.data,
+    required this.isFavorite,
+  });
 
   @override
   State<BodyDetailScreen> createState() => _BodyDetailScreenState();
@@ -15,6 +22,13 @@ class BodyDetailScreen extends StatefulWidget {
 class _BodyDetailScreenState extends State<BodyDetailScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _reviewController = TextEditingController();
+  late bool isFavoriteData;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavoriteData = widget.isFavorite;
+  }
 
   @override
   void dispose() {
@@ -127,9 +141,50 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.data.name,
-          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.data.name,
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            IconButton(
+              onPressed: () {
+                if (widget.isFavorite) {
+                  context.read<FavoriteProvider>().removeFavoriteRestaurant(
+                    widget.data.id,
+                  );
+                  setState(() {
+                    isFavoriteData = false;
+                  });
+                } else {
+                  context.read<FavoriteProvider>().addFavoriteRestaurant(
+                    Restaurant(
+                      id: widget.data.id,
+                      name: widget.data.name,
+                      description: widget.data.description,
+                      pictureId: widget.data.pictureId,
+                      city: widget.data.city,
+                      rating: widget.data.rating,
+                    ),
+                  );
+                  setState(() {
+                    isFavoriteData = true;
+                  });
+                }
+              },
+              icon: isFavoriteData
+                  ? const Icon(Icons.favorite)
+                  : const Icon(Icons.favorite_border),
+              iconSize: 32,
+              color: isFavoriteData ? Colors.red : Colors.grey,
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         Row(

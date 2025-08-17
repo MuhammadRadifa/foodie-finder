@@ -1,11 +1,16 @@
 import 'package:foodie_finder/data/constant/navigation_route.dart';
+import 'package:foodie_finder/data/source/local/database_service.dart';
 import 'package:foodie_finder/data/source/networks/api.dart';
 import 'package:foodie_finder/data/source/restaurant_impl.dart';
 import 'package:foodie_finder/domain/usecase/restaurant_use_case.dart';
+import 'package:foodie_finder/lib/services/local_notification_service.dart';
 import 'package:foodie_finder/presentation/screen/detail/detail_screen.dart';
+import 'package:foodie_finder/presentation/screen/favorite/favorite_screen.dart';
 import 'package:foodie_finder/presentation/screen/search/search_screen.dart';
 import 'package:foodie_finder/presentation/screen/settings/settings_screen.dart';
 import 'package:foodie_finder/provider/detail_provider.dart';
+import 'package:foodie_finder/provider/favorite_provider.dart';
+import 'package:foodie_finder/provider/local_notification_provider.dart';
 import 'package:foodie_finder/provider/restaurant_provider.dart';
 import 'package:foodie_finder/provider/search_restaurant.dart';
 import 'package:foodie_finder/provider/theme_provider.dart';
@@ -19,8 +24,10 @@ void main() {
     MultiProvider(
       providers: [
         Provider<ApiImpl>(create: (_) => ApiImpl()),
-        ProxyProvider<ApiImpl, RestaurantImpl>(
-          update: (_, api, __) => RestaurantImpl(api: api),
+        Provider<DatabaseService>(create: (_) => DatabaseService()),
+        ProxyProvider2<ApiImpl, DatabaseService, RestaurantImpl>(
+          update: (context, api, db, previous) =>
+              RestaurantImpl(api: api, databaseService: db),
         ),
         ProxyProvider<RestaurantImpl, RestaurantUseCase>(
           update: (_, repo, __) =>
@@ -50,6 +57,19 @@ void main() {
             ),
           ),
         ),
+        ChangeNotifierProvider<FavoriteProvider>(
+          create: (context) => FavoriteProvider(
+            restaurantUseCase: Provider.of<RestaurantUseCase>(
+              context,
+              listen: false,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider<LocalNotificationProvider>(
+          create: (context) => LocalNotificationProvider(
+            context.read<LocalNotificationService>(),
+          )..requestPermissions(),
+        ),
         ChangeNotifierProvider<ThemeNotifier>(create: (_) => ThemeNotifier()),
       ],
       child: const MainApp(), // or your actual App widget
@@ -77,6 +97,7 @@ class MainApp extends StatelessWidget {
         NavigationRoute.search.route: (context) => SearchScreen(
           query: ModalRoute.of(context)?.settings.arguments as String,
         ),
+        NavigationRoute.favorite.route: (context) => const FavoriteScreen(),
         NavigationRoute.settings.route: (context) => const SettingsScreen(),
       },
     );

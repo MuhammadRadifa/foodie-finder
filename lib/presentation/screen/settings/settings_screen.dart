@@ -12,12 +12,15 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isAutoSchedulingEnabled = false; // State untuk checkbox
+
   @override
   Widget build(BuildContext context) {
     String selectedTheme = Provider.of<ThemeNotifier>(
       context,
       listen: false,
     ).themeMode.toString().split('.').last;
+
     return Scaffold(
       appBar: AppBarContainer(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -131,6 +134,71 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
               ],
+            ),
+
+            // Spacing antara theme selector dan checkbox
+            const SizedBox(height: 32),
+
+            // Section untuk Penjadwalan Otomatis
+            const Text(
+              'Schedule',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+
+            // Checkbox Container
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[300]!, width: 1),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.schedule,
+                    size: 24,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  const SizedBox(width: 12),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Automatic Schedule',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Enable automatic scheduling for daily notifications 11 AM',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Checkbox
+                  Checkbox(
+                    value: _isAutoSchedulingEnabled,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _isAutoSchedulingEnabled = value ?? false;
+                      });
+                    },
+                    activeColor: Theme.of(context).primaryColor,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

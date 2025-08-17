@@ -23,4 +23,20 @@ class RestaurantUseCase {
   Future<void> addReview(String id, String name, String review) {
     return _restaurantRepository.addReview(id, name, review);
   }
+
+  Future<List<Restaurant>> getAllFavorites() {
+    return _restaurantRepository.getAllFavorites();
+  }
+
+  Future<Restaurant?> getFavoriteById(String id) {
+    return _restaurantRepository.getFavoriteById(id);
+  }
+
+  Future<int> addFavorite(Restaurant restaurant) {
+    return _restaurantRepository.addFavorite(restaurant);
+  }
+
+  Future<int> removeFavorite(String id) {
+    return _restaurantRepository.removeFavorite(id);
+  }
 }

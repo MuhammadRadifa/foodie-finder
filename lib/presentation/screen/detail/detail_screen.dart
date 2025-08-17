@@ -4,6 +4,7 @@ import 'package:foodie_finder/domain/entity/restaurant_detail.dart';
 import 'package:foodie_finder/presentation/screen/detail/body_detail_screen.dart';
 import 'package:foodie_finder/presentation/shared/app_bar_container.dart';
 import 'package:foodie_finder/provider/detail_provider.dart';
+import 'package:foodie_finder/provider/favorite_provider.dart';
 import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -16,6 +17,8 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  bool isFavorite = false;
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +27,15 @@ class _DetailScreenState extends State<DetailScreen> {
       if (!mounted) return;
 
       context.read<DetailProvider>().fetchRestaurantDetails(widget.id);
+
+      context
+          .read<FavoriteProvider>()
+          .fetchFavoriteRestaurantById(widget.id)
+          .then((value) {
+            setState(() {
+              isFavorite = value != null ? true : false;
+            });
+          });
     });
   }
 
@@ -42,7 +54,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Text(errorState.message),
             ),
             RestaurantListSuccessState<RestaurantDetail> successState =>
-              BodyDetailScreen(data: successState.data),
+              BodyDetailScreen(data: successState.data, isFavorite: isFavorite),
             _ => const SizedBox.shrink(),
           };
         },
