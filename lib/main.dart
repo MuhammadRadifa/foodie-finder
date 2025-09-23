@@ -12,6 +12,7 @@ import 'package:foodie_finder/provider/detail_provider.dart';
 import 'package:foodie_finder/provider/favorite_provider.dart';
 import 'package:foodie_finder/provider/local_notification_provider.dart';
 import 'package:foodie_finder/provider/restaurant_provider.dart';
+import 'package:foodie_finder/provider/schedule_provider.dart';
 import 'package:foodie_finder/provider/search_restaurant.dart';
 import 'package:foodie_finder/provider/theme_provider.dart';
 import 'package:foodie_finder/style/colors/colors.dart';
@@ -19,7 +20,13 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:foodie_finder/presentation/screen/home/home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inisialisasi timezone
+  final localNotificationService = LocalNotificationService();
+  await localNotificationService.configureLocalTimeZone();
+
   runApp(
     MultiProvider(
       providers: [
@@ -70,7 +77,16 @@ void main() {
             context.read<LocalNotificationService>(),
           )..requestPermissions(),
         ),
+        Provider<LocalNotificationService>(
+          create: (_) => LocalNotificationService(),
+        ),
         ChangeNotifierProvider<ThemeNotifier>(create: (_) => ThemeNotifier()),
+        ChangeNotifierProvider<ScheduleProvider>(
+          create: (context) {
+            final notifService = context.read<LocalNotificationService>();
+            return ScheduleProvider(notifService);
+          },
+        ),
       ],
       child: const MainApp(), // or your actual App widget
     ),

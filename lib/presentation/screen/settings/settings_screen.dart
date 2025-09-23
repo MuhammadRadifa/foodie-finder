@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodie_finder/presentation/shared/app_bar_container.dart';
 import 'package:foodie_finder/presentation/shared/bottom_bar_container.dart';
+import 'package:foodie_finder/provider/schedule_provider.dart';
 import 'package:foodie_finder/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -12,14 +13,17 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _isAutoSchedulingEnabled = false; // State untuk checkbox
-
   @override
   Widget build(BuildContext context) {
     String selectedTheme = Provider.of<ThemeNotifier>(
       context,
       listen: false,
     ).themeMode.toString().split('.').last;
+
+    /// langsung ambil dari provider biar real-time
+    bool isAutoSchedulingEnabled = context
+        .watch<ScheduleProvider>()
+        .scheduleNotification;
 
     return Scaffold(
       appBar: AppBarContainer(),
@@ -136,17 +140,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
 
-            // Spacing antara theme selector dan checkbox
             const SizedBox(height: 32),
 
-            // Section untuk Penjadwalan Otomatis
             const Text(
               'Schedule',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
-            // Checkbox Container
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -187,13 +188,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
 
-                  // Checkbox
                   Checkbox(
-                    value: _isAutoSchedulingEnabled,
+                    value: isAutoSchedulingEnabled,
                     onChanged: (bool? value) {
-                      setState(() {
-                        _isAutoSchedulingEnabled = value ?? false;
-                      });
+                      Provider.of<ScheduleProvider>(
+                        context,
+                        listen: false,
+                      ).setScheduleNotification(value ?? false);
                     },
                     activeColor: Theme.of(context).primaryColor,
                   ),
