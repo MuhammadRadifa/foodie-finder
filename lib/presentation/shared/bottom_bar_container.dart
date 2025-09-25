@@ -13,10 +13,13 @@ class BottomBarContainer extends StatelessWidget {
 
     // Determine which index should be selected based on the current route
     int currentIndex = 0; // Default to home tab
-    if (currentRoute == NavigationRoute.settings.route) {
-      currentIndex = 1;
-    } else if (currentRoute == NavigationRoute.home.route) {
+
+    if (currentRoute == NavigationRoute.home.route) {
       currentIndex = 0;
+    } else if (currentRoute == NavigationRoute.favorite.route) {
+      currentIndex = 1;
+    } else if (currentRoute == NavigationRoute.settings.route) {
+      currentIndex = 2;
     }
 
     return BottomNavigationBar(

@@ -11,6 +11,8 @@ class LocalNotificationProvider extends ChangeNotifier {
   bool? get permission => _permission;
 
   Future<void> requestPermissions() async {
+    if (_permission == true) return;
+
     _permission = await flutterNotificationService.requestPermissions();
     notifyListeners();
   }

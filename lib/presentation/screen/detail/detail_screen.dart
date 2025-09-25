@@ -27,15 +27,6 @@ class _DetailScreenState extends State<DetailScreen> {
       if (!mounted) return;
 
       context.read<DetailProvider>().fetchRestaurantDetails(widget.id);
-
-      context
-          .read<FavoriteProvider>()
-          .fetchFavoriteRestaurantById(widget.id)
-          .then((value) {
-            setState(() {
-              isFavorite = value != null ? true : false;
-            });
-          });
     });
   }
 
@@ -54,7 +45,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Text(errorState.message),
             ),
             RestaurantListSuccessState<RestaurantDetail> successState =>
-              BodyDetailScreen(data: successState.data, isFavorite: isFavorite),
+              BodyDetailScreen(data: successState.data),
             _ => const SizedBox.shrink(),
           };
         },

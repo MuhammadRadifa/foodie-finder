@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodie_finder/presentation/shared/app_bar_container.dart';
 import 'package:foodie_finder/presentation/shared/bottom_bar_container.dart';
+import 'package:foodie_finder/provider/local_notification_provider.dart';
 import 'package:foodie_finder/provider/schedule_provider.dart';
 import 'package:foodie_finder/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -190,8 +191,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                   Checkbox(
                     value: isAutoSchedulingEnabled,
-                    onChanged: (bool? value) {
+                    onChanged: (bool? value) async {
+                      final localNotifProvider =
+                          Provider.of<LocalNotificationProvider>(
+                            context,
+                            listen: false,
+                          );
+
+                      // Minta izin notifikasi
+                      await localNotifProvider.requestPermissions();
+
+                      // Baru aktifkan/disable scheduling
                       Provider.of<ScheduleProvider>(
+                        // ignore: use_build_context_synchronously
                         context,
                         listen: false,
                       ).setScheduleNotification(value ?? false);

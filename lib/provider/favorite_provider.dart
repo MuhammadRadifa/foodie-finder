@@ -13,6 +13,13 @@ class FavoriteProvider extends ChangeNotifier {
   FavoriteProvider({required RestaurantUseCase restaurantUseCase})
     : _restaurantUseCase = restaurantUseCase;
 
+  List<Restaurant> _favorites = [];
+  List<Restaurant> get favorites => _favorites;
+
+  bool isFavorite(String id) {
+    return _favorites.any((r) => r.id == id);
+  }
+
   Future<List<Restaurant>> fetchAllFavoriteRestaurants() async {
     try {
       _resultState = RestaurantListLoadingState();
@@ -26,6 +33,8 @@ class FavoriteProvider extends ChangeNotifier {
         notifyListeners();
         return [];
       }
+
+      _favorites = favorites;
 
       _resultState = RestaurantListSuccessState<List<Restaurant>>(favorites);
       notifyListeners();
@@ -75,6 +84,8 @@ class FavoriteProvider extends ChangeNotifier {
         return;
       }
 
+      _favorites.add(restaurant);
+
       _resultState = RestaurantListSuccessState<String>(
         "success added to favorites",
       );
@@ -96,6 +107,8 @@ class FavoriteProvider extends ChangeNotifier {
         notifyListeners();
         return;
       }
+
+      _favorites.removeWhere((r) => r.id == id);
 
       _resultState = RestaurantListSuccessState<String>(
         "success removed from favorites",

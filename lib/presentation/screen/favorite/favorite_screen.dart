@@ -38,7 +38,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Favorite Restaurants',
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
+                fontSize: 20,
+              ),
             ),
           ),
           Expanded(

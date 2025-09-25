@@ -1,3 +1,4 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:foodie_finder/data/constant/navigation_route.dart';
 import 'package:foodie_finder/data/source/local/database_service.dart';
 import 'package:foodie_finder/data/source/networks/api.dart';
@@ -22,6 +23,19 @@ import 'package:foodie_finder/presentation/screen/home/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const DarwinInitializationSettings initializationSettingsDarwin =
+      DarwinInitializationSettings();
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsDarwin,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   // Inisialisasi timezone
   final localNotificationService = LocalNotificationService();
@@ -72,13 +86,13 @@ void main() async {
             ),
           ),
         ),
+        Provider<LocalNotificationService>(
+          create: (_) => LocalNotificationService(),
+        ),
         ChangeNotifierProvider<LocalNotificationProvider>(
           create: (context) => LocalNotificationProvider(
             context.read<LocalNotificationService>(),
           )..requestPermissions(),
-        ),
-        Provider<LocalNotificationService>(
-          create: (_) => LocalNotificationService(),
         ),
         ChangeNotifierProvider<ThemeNotifier>(create: (_) => ThemeNotifier()),
         ChangeNotifierProvider<ScheduleProvider>(

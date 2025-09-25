@@ -7,13 +7,8 @@ import 'package:provider/provider.dart';
 
 class BodyDetailScreen extends StatefulWidget {
   final RestaurantDetail data;
-  final bool isFavorite;
 
-  const BodyDetailScreen({
-    super.key,
-    required this.data,
-    required this.isFavorite,
-  });
+  const BodyDetailScreen({super.key, required this.data});
 
   @override
   State<BodyDetailScreen> createState() => _BodyDetailScreenState();
@@ -22,13 +17,6 @@ class BodyDetailScreen extends StatefulWidget {
 class _BodyDetailScreenState extends State<BodyDetailScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _reviewController = TextEditingController();
-  late bool isFavoriteData;
-
-  @override
-  void initState() {
-    super.initState();
-    isFavoriteData = widget.isFavorite;
-  }
 
   @override
   void dispose() {
@@ -66,7 +54,6 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
               ),
             ),
           ),
-
           // Main Content
           Padding(
             padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
@@ -89,7 +76,7 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeaderInfo(),
+              _buildHeaderInfo(context),
               const SizedBox(height: 24),
               _buildDescription(),
               const SizedBox(height: 24),
@@ -122,7 +109,7 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildHeaderInfo(),
+        _buildHeaderInfo(context),
         const SizedBox(height: 16),
         _buildLocationInfo(),
         const SizedBox(height: 16),
@@ -137,7 +124,7 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
     );
   }
 
-  Widget _buildHeaderInfo() {
+  Widget _buildHeaderInfo(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -153,36 +140,36 @@ class _BodyDetailScreenState extends State<BodyDetailScreen> {
               ),
             ),
             const SizedBox(width: 8),
-            IconButton(
-              onPressed: () {
-                if (widget.isFavorite) {
-                  context.read<FavoriteProvider>().removeFavoriteRestaurant(
-                    widget.data.id,
-                  );
-                  setState(() {
-                    isFavoriteData = false;
-                  });
-                } else {
-                  context.read<FavoriteProvider>().addFavoriteRestaurant(
-                    Restaurant(
-                      id: widget.data.id,
-                      name: widget.data.name,
-                      description: widget.data.description,
-                      pictureId: widget.data.pictureId,
-                      city: widget.data.city,
-                      rating: widget.data.rating,
-                    ),
-                  );
-                  setState(() {
-                    isFavoriteData = true;
-                  });
-                }
+            Consumer<FavoriteProvider>(
+              builder: (context, provider, _) {
+                final isFavorite = provider.isFavorite(widget.data.id);
+
+                return IconButton(
+                  onPressed: () {
+                    if (isFavorite) {
+                      context.read<FavoriteProvider>().removeFavoriteRestaurant(
+                        widget.data.id,
+                      );
+                    } else {
+                      context.read<FavoriteProvider>().addFavoriteRestaurant(
+                        Restaurant(
+                          id: widget.data.id,
+                          name: widget.data.name,
+                          description: widget.data.description,
+                          pictureId: widget.data.pictureId,
+                          city: widget.data.city,
+                          rating: widget.data.rating,
+                        ),
+                      );
+                    }
+                  },
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite ? Colors.red : Colors.grey,
+                    size: 32,
+                  ),
+                );
               },
-              icon: isFavoriteData
-                  ? const Icon(Icons.favorite)
-                  : const Icon(Icons.favorite_border),
-              iconSize: 32,
-              color: isFavoriteData ? Colors.red : Colors.grey,
             ),
           ],
         ),
