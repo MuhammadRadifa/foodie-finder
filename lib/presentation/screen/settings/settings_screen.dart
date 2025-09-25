@@ -16,6 +16,10 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final isSmallScreen = screenWidth < 400;
+
     String selectedTheme = Provider.of<ThemeNotifier>(
       context,
       listen: false,
@@ -29,194 +33,249 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBarContainer(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Choose Theme',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Row(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(isSmallScreen ? 12.0 : 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      Provider.of<ThemeNotifier>(
-                        context,
-                        listen: false,
-                      ).setTheme(ThemeMode.light);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: selectedTheme == 'light'
-                            ? Theme.of(
-                                context,
-                              ).primaryColor.withValues(alpha: 0.1)
-                            : Colors.grey[100],
-                        border: Border.all(
-                          color: selectedTheme == 'light'
-                              ? Theme.of(context).primaryColor
-                              : Colors.grey[300]!,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
+                Text(
+                  'Choose Theme',
+                  style: TextStyle(
+                    fontSize: isSmallScreen ? 16 : 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: isSmallScreen ? 12 : 16),
+
+                // Theme Selection - Responsive Layout
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (constraints.maxWidth < 300) {
+                      // Stack vertically for very small screens
+                      return Column(
                         children: [
-                          Icon(
+                          _buildThemeOption(
+                            context,
+                            'light',
+                            selectedTheme,
                             Icons.light_mode,
-                            size: 40,
-                            color: selectedTheme == 'light'
-                                ? Theme.of(context).primaryColor
-                                : Colors.grey[600],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
                             'Light',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: selectedTheme == 'light'
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.grey[600],
+                            isSmallScreen,
+                          ),
+                          SizedBox(height: 12),
+                          _buildThemeOption(
+                            context,
+                            'dark',
+                            selectedTheme,
+                            Icons.dark_mode,
+                            'Dark',
+                            isSmallScreen,
+                          ),
+                        ],
+                      );
+                    } else {
+                      // Side by side for larger screens
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: _buildThemeOption(
+                              context,
+                              'light',
+                              selectedTheme,
+                              Icons.light_mode,
+                              'Light',
+                              isSmallScreen,
+                            ),
+                          ),
+                          SizedBox(width: isSmallScreen ? 12 : 16),
+                          Expanded(
+                            child: _buildThemeOption(
+                              context,
+                              'dark',
+                              selectedTheme,
+                              Icons.dark_mode,
+                              'Dark',
+                              isSmallScreen,
                             ),
                           ),
                         ],
-                      ),
-                    ),
+                      );
+                    }
+                  },
+                ),
+
+                SizedBox(height: isSmallScreen ? 24 : 32),
+
+                Text(
+                  'Schedule',
+                  style: TextStyle(
+                    fontSize: isSmallScreen ? 16 : 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      Provider.of<ThemeNotifier>(
-                        context,
-                        listen: false,
-                      ).setTheme(ThemeMode.dark);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: selectedTheme == 'dark'
-                            ? Colors.white.withOpacity(0.1)
-                            : Colors.grey[100],
-                        border: Border.all(
-                          color: selectedTheme == 'dark'
-                              ? Colors.white
-                              : Colors.grey[300]!,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
+                SizedBox(height: isSmallScreen ? 12 : 16),
+
+                // Schedule Section - Responsive
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey[300]!, width: 1),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(
-                            Icons.dark_mode,
-                            size: 40,
-                            color: selectedTheme == 'dark'
-                                ? Colors.white
-                                : Colors.grey[600],
+                            Icons.schedule,
+                            size: isSmallScreen ? 20 : 24,
+                            color: Theme.of(context).primaryColor,
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Dark',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: selectedTheme == 'dark'
-                                  ? Colors.white
-                                  : Colors.grey[600],
+                          SizedBox(width: isSmallScreen ? 8 : 12),
+
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Automatic Schedule',
+                                  style: TextStyle(
+                                    fontSize: isSmallScreen ? 14 : 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Theme.of(
+                                      context,
+                                    ).textTheme.bodyLarge?.color,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'Enable automatic scheduling for daily notifications 11 AM',
+                                  style: TextStyle(
+                                    fontSize: isSmallScreen ? 12 : 14,
+                                    color: Colors.grey[600],
+                                  ),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
+
+                      // Checkbox separated for better mobile layout
+                      SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Transform.scale(
+                          scale: isSmallScreen ? 0.9 : 1.0,
+                          child: Checkbox(
+                            value: isAutoSchedulingEnabled,
+                            onChanged: (bool? value) async {
+                              final localNotifProvider =
+                                  Provider.of<LocalNotificationProvider>(
+                                    context,
+                                    listen: false,
+                                  );
+
+                              // Minta izin notifikasi
+                              await localNotifProvider.requestPermissions();
+
+                              // Baru aktifkan/disable scheduling
+                              Provider.of<ScheduleProvider>(
+                                // ignore: use_build_context_synchronously
+                                context,
+                                listen: false,
+                              ).setScheduleNotification(value ?? false);
+                            },
+                            activeColor: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
+                // Add some bottom padding to prevent content from being hidden behind bottom nav
+                SizedBox(height: 80),
               ],
             ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomBarContainer(),
+    );
+  }
 
-            const SizedBox(height: 32),
+  Widget _buildThemeOption(
+    BuildContext context,
+    String themeType,
+    String selectedTheme,
+    IconData icon,
+    String label,
+    bool isSmallScreen,
+  ) {
+    final isSelected = selectedTheme == themeType;
 
-            const Text(
-              'Schedule',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: () {
+        Provider.of<ThemeNotifier>(
+          context,
+          listen: false,
+        ).setTheme(themeType == 'light' ? ThemeMode.light : ThemeMode.dark);
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? (themeType == 'light'
+                    ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                    : Colors.white.withOpacity(0.1))
+              : Colors.grey[100],
+          border: Border.all(
+            color: isSelected
+                ? (themeType == 'light'
+                      ? Theme.of(context).primaryColor
+                      : Colors.white)
+                : Colors.grey[300]!,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: isSmallScreen ? 32 : 40,
+              color: isSelected
+                  ? (themeType == 'light'
+                        ? Theme.of(context).primaryColor
+                        : Colors.white)
+                  : Colors.grey[600],
             ),
-            const SizedBox(height: 16),
-
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey[300]!, width: 1),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.schedule,
-                    size: 24,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  const SizedBox(width: 12),
-
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Automatic Schedule',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Enable automatic scheduling for daily notifications 11 AM',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Checkbox(
-                    value: isAutoSchedulingEnabled,
-                    onChanged: (bool? value) async {
-                      final localNotifProvider =
-                          Provider.of<LocalNotificationProvider>(
-                            context,
-                            listen: false,
-                          );
-
-                      // Minta izin notifikasi
-                      await localNotifProvider.requestPermissions();
-
-                      // Baru aktifkan/disable scheduling
-                      Provider.of<ScheduleProvider>(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        listen: false,
-                      ).setScheduleNotification(value ?? false);
-                    },
-                    activeColor: Theme.of(context).primaryColor,
-                  ),
-                ],
+            SizedBox(height: isSmallScreen ? 6 : 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: isSmallScreen ? 14 : 16,
+                fontWeight: FontWeight.w600,
+                color: isSelected
+                    ? (themeType == 'light'
+                          ? Theme.of(context).primaryColor
+                          : Colors.white)
+                    : Colors.grey[600],
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: BottomBarContainer(),
     );
   }
 }

@@ -14,16 +14,30 @@ class FavoriteScreen extends StatefulWidget {
   State<FavoriteScreen> createState() => _FavoriteScreenState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen> {
+class _FavoriteScreenState extends State<FavoriteScreen>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     Future.microtask(() {
       if (!mounted) return;
 
       context.read<FavoriteProvider>().fetchAllFavoriteRestaurants();
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<FavoriteProvider>().fetchAllFavoriteRestaurants();
+    }
   }
 
   @override
@@ -67,6 +81,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
                           city: restaurant.city,
                           rating: restaurant.rating,
+                          fetchData: () {
+                            provider.fetchAllFavoriteRestaurants();
+                          },
                         );
                       },
                     ),

@@ -7,6 +7,7 @@ class ListRestaurantCard extends StatefulWidget {
   final String imageUrl;
   final String city;
   final double rating;
+  final VoidCallback? fetchData;
 
   const ListRestaurantCard({
     super.key,
@@ -16,6 +17,7 @@ class ListRestaurantCard extends StatefulWidget {
     required this.imageUrl,
     required this.city,
     required this.rating,
+    this.fetchData,
   });
 
   @override
@@ -50,7 +52,9 @@ class _ListRestaurantCardState extends State<ListRestaurantCard>
   }
 
   void _onTapUp(TapUpDetails details) {
-    Navigator.pushNamed(context, "/detail", arguments: widget.id);
+    Navigator.pushNamed(context, "/detail", arguments: widget.id).then((_) {
+      widget.fetchData?.call();
+    });
     _animationController.reverse();
   }
 

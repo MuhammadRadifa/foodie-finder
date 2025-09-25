@@ -108,7 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         borderSide: BorderSide.none,
                                       ),
                                       filled: true,
-                                      fillColor: Colors.white,
                                       contentPadding:
                                           const EdgeInsets.symmetric(
                                             horizontal: 16,
