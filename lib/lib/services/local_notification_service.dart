@@ -21,6 +21,8 @@ class LocalNotificationService {
         false;
   }
 
+  bool _isRequestingPermission = false;
+
   Future<void> configureLocalTimeZone() async {
     tz.initializeTimeZones();
     final String timeZoneName = await FlutterTimezone.getLocalTimezone();
@@ -52,12 +54,32 @@ class LocalNotificationService {
   }
 
   Future<bool> _requestAndroidNotificationsPermission() async {
-    return await flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin
-            >()
-            ?.requestNotificationsPermission() ??
-        false;
+    if (_isRequestingPermission) {
+      // Kalau sedang request, tunggu sampai selesai
+      while (_isRequestingPermission) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
+      return await _isAndroidPermissionGranted();
+    }
+
+    if (await _isAndroidPermissionGranted()) return true;
+
+    _isRequestingPermission = true;
+    try {
+      final granted =
+          await flutterLocalNotificationsPlugin
+              .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin
+              >()
+              ?.requestNotificationsPermission() ??
+          false;
+      return granted;
+    } catch (e) {
+      debugPrint('Permission request failed: $e');
+      return false;
+    } finally {
+      _isRequestingPermission = false;
+    }
   }
 
   Future<bool?> requestPermissions() async {

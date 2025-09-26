@@ -42,7 +42,10 @@ class _SearchScreenState extends State<SearchScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Search Results for "${widget.query}"',
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: 20,
+              ),
             ),
           ),
           Expanded(
